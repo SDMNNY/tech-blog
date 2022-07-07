@@ -28,6 +28,24 @@ router.get("/edit/:id", withAuth, async (req, res) => {
         const blogpostData = await Blogpost.findByPk(req.params.id);
         const blogposts = blogpostData.get ({ plain: true });
 
-        res.render 
+        res.render("editBlogPost", {
+            layout: "dashboard",
+            blogposts,
+            loggedIn: req.session.loggedIn,
+        });
+    } catch (err) {
+        res.status(500).json(err);
     }
-})
+});
+
+router.get("/new", withAuth, async (req, res) => {
+    try {
+        res.render("newBlogPost", {
+            layout: "dashboard",
+        });
+    } catch (err) {
+        res.status(500)
+    }
+});
+
+module.exports = router; 
