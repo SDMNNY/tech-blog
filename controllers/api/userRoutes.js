@@ -43,3 +43,33 @@ router.post("/login", async (req, res) => {
         res.status(400).json(err);
     }
 });
+
+router.post ("/logout", (req, res) => {
+    if (req.session.loggedIn) {
+        req.session.destroy(() => {
+            res.status(204).end();
+        });
+    } else {
+        res.status(404).end();
+    }
+});
+
+router.delete("/user/:id", async (req, res) => {
+    try {
+        const userData = await User.destroy({
+            where: { id: req.params.id },
+        });
+        
+        if (!userData) {
+            res
+            .status(404)
+            .json({ message: "Could not find the user with this ID" });
+            return;
+        }
+        res.json(userData);
+    } catch (err) {
+        res.status(400).json(err);
+    }
+});
+
+module.exports = router; 
