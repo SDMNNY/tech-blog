@@ -14,3 +14,23 @@ router.post("/", withAuth, async (req, res) => {
         res.status(500).json(err);
     }
 });
+
+router.put("/:id", withAuth, async (req, res) => { 
+    try { 
+        const updateBlogData = await Blogpost.update(req.body, {
+            where: { id: req.params.id },
+        });
+
+        if (!updateBlogData) {
+            res
+            .status(404)
+            .json({ message: "Could not find a blog post with this id" });
+            return;
+        } else { 
+            res.status(200).json(updateBlogData);
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
